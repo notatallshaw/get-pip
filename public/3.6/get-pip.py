@@ -36,6 +36,7 @@ if this_python < min_version:
 
 import os.path
 import pkgutil
+import runpy
 import shutil
 import tempfile
 import argparse
@@ -114,9 +115,8 @@ def bootstrap(tmpdir):
 
     # Execute the included pip and use it to install the latest pip and
     # any user-requested packages from PyPI.
-    from pip._internal.cli.main import main as pip_entry_point
-    args = determine_pip_install_arguments()
-    sys.exit(pip_entry_point(args))
+    sys.argv = ["pip"] + determine_pip_install_arguments()
+    runpy.run_module("pip", run_name="__main__")
 
 
 def main():
